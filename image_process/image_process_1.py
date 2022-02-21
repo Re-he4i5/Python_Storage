@@ -24,41 +24,18 @@ cv2.waitKey(0)
 
 #(4) カラー画像を読み込み，3 チャネル(RGB)に分離し，入力画像と共に各チャネルの画像を表示するプログラム
 im_bgr = cv2.imread('image/berry.jpeg')
+im_b, im_g, im_r = cv2.split(im_bgr)
 
-#cv2.imshow('image_b',im_b)
-#cv2.imshow('image_g',im_g)
-#cv2.imshow('image_r',im_r)
-#BGRからRGBに変換
-im_rgb = cv2.cvtColor(im_bgr, cv2.COLOR_BGR2RGB)
-im_r = im_rgb[:,:, 0]
-im_g = im_rgb[:,:, 1]
-im_b = im_rgb[:,:, 2]
+#グレー画像とカラー画像の合成のために，グレー画像をカラー化
+im_b = cv2.cvtColor(im_b,cv2.COLOR_GRAY2BGR)
+im_g = cv2.cvtColor(im_g,cv2.COLOR_GRAY2BGR)
+im_r = cv2.cvtColor(im_r,cv2.COLOR_GRAY2BGR)
 
-plt.subplot(2, 2, 1)
-plt.imshow(im_rgb)
-plt.subplot(2, 2, 2)
-plt.imshow(im_b) 
-plt.subplot(2, 2, 3)
-plt.imshow(im_g) 
-plt.subplot(2, 2, 4)
-plt.imshow(im_r) 
-plt.show()
-print('(4)')
-cv2.waitKey(0)
+im_h_1 = cv2.hconcat([im_rgb, im_b])
+im_h_2 = cv2.hconcat([im_g ,im_r])
+im_v = cv2.vconcat([im_h_1, im_h_2])
+cv2.imwrite('image/image_array.jpeg', im_v)
 
-im_bgr = cv2.imread('image/berry.jpeg')
-im_r = im_bgr.copy()
-im_r[:, :, (1, 2)] = 0
-im_g = im_bgr.copy()
-im_g[:, :, (0, 2)] = 0
-im_b = im_bgr.copy()
-im_b[:, :, (0, 1)] = 0
-
-# 横に並べて結合（どれでもよい）
-im_RGB = np.concatenate((im_r, im_g, im_b), axis=1)
-
-plt.imshow(im_RGB)
-print('(4-2)')
 cv2.waitKey(0)
 
 
@@ -66,20 +43,15 @@ cv2.waitKey(0)
 #Y = 0.2126 R + 0.7152 G + 0.0722 B
 
 im_bgr = cv2.imread('image/berry.jpeg')
-im_b = im_bgr.copy()
-im_b[:, :, (1, 2)] = 0
-im_b = 0.0722 * im_bgr
+im_gray = cv2.cvtColor(im_rgb, cv2.COLOR_BGR2GRAY)
+im_b, im_g, im_r = cv2.split(im_bgr)
 
-im_g = im_bgr.copy()
-im_g[:, :, (0, 2)] = 0
-im_g = 0.7152 * im_bgr
+im_b = 0.0722 * im_b
+im_g = 0.7152 * im_g
+im_r = 0.2126 * im_r
 
-im_r = im_bgr.copy()
-im_r[:, :, (0, 1)] = 0
-im_r = 0.2126 * im_bgr
-
-im_fomula_RGB = im_b + im_r + im_g
-cv2.imshow('image',im_b)
+im_fomula = im_b + im_r + im_g
+cv2.imwrite('image/image_fomula.jpeg', im_fomula)
 
 
 print('(5)')
