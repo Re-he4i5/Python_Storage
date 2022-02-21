@@ -56,5 +56,7 @@ cv2.imwrite('image/image_fomula.jpeg', im_fomula)
 
 print('(5)')
 cv2.waitKey(0)
+
+
 # すべてウィンドウを閉じる
 cv2.destroyAllWindows()
