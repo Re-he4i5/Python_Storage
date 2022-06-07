@@ -57,13 +57,58 @@ cv2.imwrite('image/im_resize_AREA.jpeg', im_resize_AREA)
 
 
 #(5)PIL により画像を拡大・縮小するプログラム
+from PIL import Image
+import numpy as np
 
+img = Image.open("image.jpg")
+w,h = img.size
 
+img_resize2 = img.resize(((w*2),(h*2)))
+img_resize_05 = img.resize(((w // 2),(h // 2)))
+
+img_resize2.save("save_1.jpg")
+img_resize_05.save("save_1.jpg")
 #(6)アフィン変換により画像を拡大・縮小するプログラム
 
+def scale_matrix(sx,sy):
+    M = np.array([[sx,0 ,0],
+                  [0 ,sy,0]])
+    return M
+
+img = Image.read("image.jpg")
+w,h = img.shape[:2]
+
+M2 = scale_matrix(sx= 2.0,sy = 2.0)
+M05 = scale_matrix(sx= 0.5,sy = 0.5)
+
+dst2 =cv2.warpAffine(img,M2,dsize = (w*2, h*2))
+dst05 =cv2.warpAffine(img,M05,dsize = (w*2, h*2))
+
+cv2.imshow("twice",dst2)
+cv2.imshow("half",dst05)
+
+cv2.imwrite("image.jpg",dst2)
+
+cv2.imwrite("image.jpg",dst05)
+
 #(7)アフィン変換により，画像を平行移動するプログラム。
+img = cv2.imread("cat.jpg")
+h,w = img.shape[:2]
+dx,dy = 500,500
+
+afn_mat = np.float32([[1,0,dx],
+                      [0,1,dy]])
+img_afn = cv2.warpAffine(img,afn_mat,(w,h))
+
+cv2.imshow("trans",img_afn)
 
 #(8)アフィン変換により，画像を回転するプログラム
+img = cv2.imread("cat.jpg")
+h,w = img.shape[:2]
+
+rot_mat = cv2.getRotationMatrix2D((w/2,h/2),40,1)
+img_afn =cv2.warpAffine(img,rot_mat,(w,h))
+cv2.imshow("trans",img_afn)
 
 #(9)輝度値(ピクセル値)のヒストグラムを作成するプログラム
 
